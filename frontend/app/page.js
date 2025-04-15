@@ -1,12 +1,15 @@
 'use client'
 import Link from "next/link";
+import { useState, useRef, useEffect } from 'react';
 import { IoMdSearch } from "react-icons/io";
-import { FaBell } from "react-icons/fa";
-import { FaRegUser } from "react-icons/fa";
+import { FaBell, FaRegUser, FaPlay } from "react-icons/fa";
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
-import { FaPlay } from "react-icons/fa";
 import { FaCircleInfo } from "react-icons/fa6";
+import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
+import { ImEnlarge } from "react-icons/im";
+import videojs from 'video.js';
+import 'video.js/dist/video-js.css';
 
 const WhiteButton = styled(Button)({
     boxSizing: 'content-box', // Default is 'border-box' in MUI
@@ -18,27 +21,65 @@ const WhiteButton = styled(Button)({
     },
   });
 
+const ImageVid = () => {
+  const [isHovered, setIsHovered] = useState(false);
+  const videoUrl = "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4";
+
+  return (
+    <div 
+      className="relative w-[200px] h-[112.5px] transition-all duration-300 z-10"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {!isHovered ? (
+        <img
+          className="w-full h-full object-cover"
+          src='/assets/jimmyfallon.webp'
+          alt='jimmy-photo'
+        />
+      ) : (
+        <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-black z-50">
+              <div className="flex w-full h-[50%] ">
+              <video
+                autoPlay
+                muted
+                loop
+                className="w-full h-full object-cover"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.open(`webxplayer://play?url=${encodeURIComponent(videoUrl)}`);
+                }}
+              >
+                <source src={videoUrl} type="video/mp4" />
+              </video>
+              </div>
+            <div className='flex flex-col gap-3 p-4 h-[40%]'>
+            <div className="flex flex-row gap-3 justify-start items-center">
+              <AiOutlineLike className='text-white text-xl cursor-pointer' />
+              <AiOutlineDislike className='text-white text-xl cursor-pointer' />
+              <ImEnlarge className='text-white text-xl cursor-pointer' />
+            </div>
+            <div className="flex flex-col">
+              <h2 className="text-xl text-white leading-none">Morning Show with Jimmy Fallon</h2>
+              <h4 className="text-md italic text-white">Series</h4>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function Main() {
     return (
         <>
             <div className='absolute flex flex-col gap-5 w-full left-5 top-170 w-30 h-auto'>
                 <div className='flex flex-col gap-2'>
-                    <div className="flex justify-start text-white text-lg font-bold">
-                        <a>Popular on Netflix</a>
+                    <div className="flex justify-start text-white text-xl font-bold">
+                        Popular on Netflix
                     </div>
                     <div className="flex flex-row gap-1">
-                        <img 
-                        className="w-60 h-35 rounded-md"
-                        alt='jimmy-logo'
-                        src='/assets/jimmyfallon.webp'/>
-                        <img 
-                        className="w-60 h-35 rounded-md"
-                        alt='jimmy-logo'
-                        src='/assets/jimmyfallon.webp'/>
-                        <img 
-                        className="w-60 h-35 rounded-md"
-                        alt='jimmy-logo'
-                        src='/assets/jimmyfallon.webp'/>
+                        <ImageVid/>
                     </div>
                 </div>
             </div>
