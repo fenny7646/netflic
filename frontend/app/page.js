@@ -1,8 +1,50 @@
-// app/page.js
+'use client'
 import Link from "next/link";
 import { IoMdSearch } from "react-icons/io";
 import { FaBell } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa";
+import { styled } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+import { FaPlay } from "react-icons/fa";
+import { FaCircleInfo } from "react-icons/fa6";
+
+const WhiteButton = styled(Button)({
+    boxSizing: 'content-box', // Default is 'border-box' in MUI
+    padding: '10px 15px',
+    backgroundColor: 'white',
+    color: 'black',
+    '&:hover': {
+      backgroundColor: '#f0f0f0'
+    },
+  });
+
+function Main() {
+    return (
+        <>
+            <div className='absolute flex flex-col gap-5 w-full left-5 top-170 w-30 h-auto'>
+                <div className='flex flex-col gap-2'>
+                    <div className="flex justify-start text-white text-lg font-bold">
+                        <a>Popular on Netflix</a>
+                    </div>
+                    <div className="flex flex-row gap-1">
+                        <img 
+                        className="w-60 h-35 rounded-md"
+                        alt='jimmy-logo'
+                        src='/assets/jimmyfallon.webp'/>
+                        <img 
+                        className="w-60 h-35 rounded-md"
+                        alt='jimmy-logo'
+                        src='/assets/jimmyfallon.webp'/>
+                        <img 
+                        className="w-60 h-35 rounded-md"
+                        alt='jimmy-logo'
+                        src='/assets/jimmyfallon.webp'/>
+                    </div>
+                </div>
+            </div>
+        </>
+    )
+}
 
 function Header() {
   return (
@@ -15,7 +57,7 @@ function Header() {
             className='w-30 h-7' 
             src='/assets/logo.png'
             alt='Netflix-logo'
-            width={100} // Added width and height
+            width={100} 
             height={40}
             />
         </div>
@@ -31,6 +73,19 @@ function Header() {
         <Link href="/profile"><FaRegUser className='fill-white w-auto h-full aspect-square'/></Link>
       </div>
     </div>
+    <div className="absolute flex flex-col gap-3 top-100 left-7 w-100 h-60">
+        <h1 className='flex text-5xl font-bold text-white'>Ask me what you want</h1>
+        <p className='flex text-sm text-white'>After his father's death, Eric Zimmerman travels to Spain to oversee his company's branches. In Madrid, he falls for Judith and engage in an</p>
+        <div className='flex flex-row gap-3'>
+        <WhiteButton className='bg-white text-black' variant="contained" startIcon={<FaPlay />}>
+            Play
+        </WhiteButton>
+        <WhiteButton className='bg-white text-black' variant="contained" startIcon={<FaCircleInfo />}>
+            More Info
+        </WhiteButton>
+        </div>
+    </div>
+    <Main/>
    </>
   );
 }
