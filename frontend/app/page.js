@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import { FaCircleInfo } from "react-icons/fa6";
 import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
 import { ImEnlarge } from "react-icons/im";
+import { IoMdArrowRoundBack } from "react-icons/io";
 import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
 
@@ -24,13 +25,11 @@ const WhiteButton = styled(Button)({
 const ImageVid = () => {
   const [isHovered, setIsHovered] = useState(false);
   const videoUrl = "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4";
-
   return (
     <div 
       className="relative w-[200px] h-[112.5px] transition-all duration-300 z-10"
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+      onMouseLeave={() => setIsHovered(false)}>
       {!isHovered ? (
         <img
           className="w-full h-full object-cover"
@@ -48,18 +47,19 @@ const ImageVid = () => {
                 onClick={(e) => {
                   e.preventDefault();
                   window.open(`webxplayer://play?url=${encodeURIComponent(videoUrl)}`);
-                }}
-              >
+                }}>
                 <source src={videoUrl} type="video/mp4" />
               </video>
               </div>
             <div className='flex flex-col gap-3 p-4 h-[40%]'>
-            <div className="flex flex-row gap-3 justify-start items-center">
-              <AiOutlineLike className='text-white text-xl cursor-pointer' />
-              <AiOutlineDislike className='text-white text-xl cursor-pointer' />
-              <ImEnlarge className='text-white text-xl cursor-pointer' />
+            <div className="flex flex-row gap-3 justify-between items-center">
+              <div className="flex flex-row gap-3">
+                <AiOutlineLike className='fill-white text-xl cursor-pointer hover:fill-red'/>
+                <AiOutlineDislike className='fill-white text-xl cursor-pointer hover:fill-red'/>
+              </div>
+              <ImEnlarge className='fill-white text-xl cursor-pointer hover:fill-red'/>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-5">
               <h2 className="text-xl text-white leading-none">Morning Show with Jimmy Fallon</h2>
               <h4 className="text-md italic text-white">Series</h4>
             </div>
@@ -71,6 +71,7 @@ const ImageVid = () => {
 }
 
 function Main() {
+
     return (
         <>
             <div className='absolute flex flex-col gap-5 w-full left-5 top-170 w-30 h-auto'>
