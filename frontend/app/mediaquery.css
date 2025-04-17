@@ -1,0 +1,22 @@
+
+
+
+@media (max-width: 500px) {
+    body{min-height: 300px;}
+    .base-img {width: 100%;height: 650px;}
+    /* Navbar */
+    .navbar-con-1 {gap: 1px; width: 80%}
+    .navbar-con-2 {gap: 6px; width: 20%}
+    .navbar-logo {width: 70px;height:20px;}
+    .navbar-text {font-size: 6pt;}
+    /* Details-Main */
+    .detail-con {width: 250px;height: auto}
+    .detail-con-1 {font-size: 25pt;}
+    .detail-con-2 {font-size: 10pt;}
+    .detail-con-3-but-1 {font-size: 3pt;}
+    /* Topic */
+    .detail-con-3-but-icon {display: none;line-height: 1;}
+    .topicer {font-size: 10pt;}
+    /* Popular Con */
+    .card-con-1 {min-width: 70;height: 60;}
+}
