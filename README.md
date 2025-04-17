@@ -6,6 +6,7 @@ THe App Uses ReactJS hooks for mouse hover loading. Navbar and each cards are cu
 
 # Running The Project
 *Clone Repo
+*Log In to TMDB, Get API v4 Token, then place it in a .env file in backend folder. 
 *Run in two terminals.
 *Use `python manage runserver` for Django
 *Use `npm run dev` for NextJS
