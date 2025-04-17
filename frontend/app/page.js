@@ -25,34 +25,46 @@ const WhiteButton = styled(Button)({
 
 function VideoPlayer({ videoUrl }) {
     const videoRef = useRef(null);
+    let [isFullScreen, setIsFullscreen] = useState(false);
   
-    const playFullscreen = () => {
-      if (videoRef.current) {
-        // Play video
-        videoRef.current.play();
-        // Request fullscreen
-        if (videoRef.current.requestFullscreen) {
-          videoRef.current.requestFullscreen();
-        } else if (videoRef.current.webkitRequestFullscreen) {
-          videoRef.current.webkitRequestFullscreen();
-        } else if (videoRef.current.msRequestFullscreen) {
-          videoRef.current.msRequestFullscreen();
+    const handleFullscreen = () => {
+      setIsFullscreen(true);
+      setTimeout(() => {
+        if (videoRef.current) {
+          videoRef.current.play();
         }
-      }
+      }, 100); // Ensure video element is mounted before play
     };
-  
+    // const playFullscreen = () => {
+    //   if (videoRef.current) {
+    //     // Play video
+    //     videoRef.current.play();
+    //     // Request fullscreen
+    //     if (videoRef.current.requestFullscreen) {
+    //       videoRef.current.requestFullscreen();
+    //     } else if (videoRef.current.webkitRequestFullscreen) {
+    //       videoRef.current.webkitRequestFullscreen();
+    //     } else if (videoRef.current.msRequestFullscreen) {
+    //       videoRef.current.msRequestFullscreen();
+    //     }
+    //   }
+    // };
+     
     return (
       <div>
-        <ImEnlarge onClick={playFullscreen} className='fill-white text-xl cursor-pointer hover:fill-red'/>
-        <video
-          ref={videoRef}
-          src={videoUrl}
-          autoPlay
-          muted
-          playsInline
-          style={{ display: "none" }} // Hide video until fullscreen
-          onPlay={() => (videoRef.current.style.display = "block")}
-        />
+        <ImEnlarge onClick={handleFullscreen} className='fill-white text-xl cursor-pointer hover:fill-red'/>
+        {isFullScreen && 
+        <div className="fixed top-[5vh] left-[5vw] w-[90vw] h-[90vh] bg-black z-999 rounded-md justify-center items-center">
+          <video
+            ref={videoRef}
+            src={videoUrl}
+            autoPlay
+            muted
+            playsInline
+            style={{ display: "none" }} // Hide video until fullscreen
+            onPlay={() => (videoRef.current.style.display = "block")}
+          />
+        </div>}
       </div>
     );
   }
@@ -116,7 +128,11 @@ const ImageVid = () => {
                     >
                     <source src={video_url} type="video/mp4" />
                   </video>
-                  {showBack && <div className='absolute left-0 bottom-0 flex flex-col gap-3 p-4 h-auto w-full'>
+                   <div className='absolute left-0 bottom-0 flex flex-col gap-3 p-4 h-auto w-full'>
+                    {showBack && <div className="flex flex-col gap-1">
+                      <h2 className="text-xl text-white leading-none">{movie.name}</h2>
+                      <h4 className="text-md italic text-white">{movie.status}</h4>
+                    </div>}
                     <div className="flex flex-row gap-3 justify-between items-center">
                       <div className="flex flex-row gap-3">
                         <AiOutlineLike className='fill-white text-xl cursor-pointer hover:fill-red'/>
@@ -124,11 +140,7 @@ const ImageVid = () => {
                       </div>
                       <VideoPlayer videoUrl={video_url}/>
                     </div>
-                    <div className="flex flex-col gap-1">
-                      <h2 className="text-xl text-white leading-none">{movie.name}</h2>
-                      <h4 className="text-md italic text-white">{movie.status}</h4>
-                    </div>
-                  </div>}
+                  </div>
                 </div>
             </div>
           )}
@@ -136,6 +148,44 @@ const ImageVid = () => {
         )
     )}
     </>
+  );
+}
+
+function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50); // Adjust threshold as needed
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+        <div className={`fixed top-0 left-0 flex flex-row justify-between w-full h-[50px] p-3 transition-colors duration-300 z-50 ${scrolled ? "bg-black bg-opacity-90" : "bg-transparent"}`}>
+        <div className='flex flex-row gap-2 justify-evenly w-[40%]'>
+          <div className='flex justify-center items-center'>
+              <img 
+              className='w-30 h-7' 
+              src='/assets/logo.png'
+              alt='Netflix-logo'
+              width={100} 
+              height={40}
+              />
+          </div>
+          <Link href="/" className='flex text-white text-sm justify-center items-center active:text-transparent leading-none'>Home</Link>
+          <Link href="/tv-shows" className='flex text-white text-sm justify-center items-center active:text-transparent leading-none'>TV Shows</Link>
+          <Link href="/movies" className='flex text-white text-sm justify-center items-center active:text-transparent leading-none'>Movies</Link>
+          <Link href="/news" className='flex text-white text-sm justify-center items-center active:text-transparent leading-none'>News & Popular</Link>
+          <Link href="/my-list" className='flex text-white text-sm justify-center items-center active:text-transparent leading-none'>My List</Link>
+        </div>
+        <div className='flex flex-row gap-5 justify-end w-[60%] p-1'>
+          <Link href="/search"><IoMdSearch className='fill-white w-auto h-full aspect-square'/></Link>
+          <Link href="/notifications"><FaBell className='fill-white w-auto h-full aspect-square'/></Link>
+          <Link href="/profile"><FaRegUser className='fill-white w-auto h-full aspect-square'/></Link>
+        </div>
+      </div>
   );
 }
 
@@ -161,29 +211,7 @@ function Header() {
   return (
    <>
     <img className='relative w-full h-full' src='/assets/netflicb.avif'/>
-    <div className='absolute top-3 left-0 flex flex-row justify-between w-full h-[25px] px-4'>
-      <div className='flex flex-row gap-2 justify-evenly w-[40%]'>
-        <div className='flex justify-center items-center'>
-            <img 
-            className='w-30 h-7' 
-            src='/assets/logo.png'
-            alt='Netflix-logo'
-            width={100} 
-            height={40}
-            />
-        </div>
-        <Link href="/" className='flex text-white text-sm justify-center items-center active:text-transparent leading-none'>Home</Link>
-        <Link href="/tv-shows" className='flex text-white text-sm justify-center items-center active:text-transparent leading-none'>TV Shows</Link>
-        <Link href="/movies" className='flex text-white text-sm justify-center items-center active:text-transparent leading-none'>Movies</Link>
-        <Link href="/news" className='flex text-white text-sm justify-center items-center active:text-transparent leading-none'>News & Popular</Link>
-        <Link href="/my-list" className='flex text-white text-sm justify-center items-center active:text-transparent leading-none'>My List</Link>
-      </div>
-      <div className='flex flex-row gap-5 justify-end w-[60%] p-1'>
-        <Link href="/search"><IoMdSearch className='fill-white w-auto h-full aspect-square'/></Link>
-        <Link href="/notifications"><FaBell className='fill-white w-auto h-full aspect-square'/></Link>
-        <Link href="/profile"><FaRegUser className='fill-white w-auto h-full aspect-square'/></Link>
-      </div>
-    </div>
+    <Navbar/>
     <div className="absolute flex flex-col gap-3 top-70 left-7 w-100 h-60">
         <h1 className='flex text-5xl font-bold text-white'>Ask me what you want</h1>
         <p className='flex text-sm text-white'>After his father's death, Eric Zimmerman travels to Spain to oversee his company's branches. In Madrid, he falls for Judith and engage in an</p>

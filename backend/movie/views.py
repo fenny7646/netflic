@@ -87,21 +87,17 @@ class MovieListView(APIView):
                 },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-            
-    def post(self, request):
-        movie_id = request.data.get('movie_id')
+         
+class PlayMovieView(APIView):
+    def post(self, request, movie_id):
         if not movie_id:
             return Response(
                 {"error": "movie_id parameter is required"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
+                status=status.HTTP_400_BAD_REQUEST)
         try:
-            # Verify movie exists in TMDB
             movie_response = requests.get(
                 f"https://api.themoviedb.org/3/movie/{movie_id}",
-                headers={"Authorization": f"Bearer {settings.TMDB_ACCESS_TOKEN}"}
-            )
+                headers={"Authorization": f"Bearer {settings.TMDB_ACCESS_TOKEN}"})
             
             if movie_response.status_code == 404:
                 return Response(
@@ -112,27 +108,9 @@ class MovieListView(APIView):
             movie_response.raise_for_status()
             movie_data = movie_response.json()
 
-            # Get video URL if available
-            video_url = None
-            video_response = requests.get(
-                f"https://api.themoviedb.org/3/movie/{movie_id}/videos",
-                headers={"Authorization": f"Bearer {settings.TMDB_ACCESS_TOKEN}"}
-            )
-            if video_response.status_code == 200:
-                videos = video_response.json().get('results', [])
-                if videos:
-                    video = videos[0]
-                    video_url = f"https://www.youtube.com/watch?v={video['key']}" if video['site'] == 'YouTube' else None
-
             return Response({
                 "status": f"Now playing: {movie_data['title']}",
-                "movie_info": {
-                    "id": movie_data['id'],
-                    "title": movie_data['title'],
-                    "poster_url": f"https://image.tmdb.org/t/p/w500{movie_data['poster_path']}" if movie_data.get('poster_path') else None,
-                    "video_url": video_url,
-                    "video_stat": "true"
-                }
+                "movie_id": movie_data['id']
             })
             
         except requests.exceptions.RequestException as e:
